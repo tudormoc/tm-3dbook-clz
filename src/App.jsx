@@ -15,6 +15,7 @@ function App() {
   const [openRatio, setOpenRatio] = useState(0); // 0 (closed) to 1 (fully open)
   const [showPages, setShowPages] = useState(true);
   const [bindingType, setBindingType] = useState('classic');
+  const [coverColor, setCoverColor] = useState('#ffffff');
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -46,6 +47,7 @@ function App() {
                 openRatio={openRatio}
                 showPages={showPages}
                 bindingType={bindingType}
+                coverColor={coverColor}
               />
             </Stage>
             <OrbitControls makeDefault autoRotate={false} enableDamping={false} />
@@ -62,6 +64,8 @@ function App() {
         setShowPages={setShowPages}
         bindingType={bindingType}
         setBindingType={setBindingType}
+        coverColor={coverColor}
+        setCoverColor={setCoverColor}
         onImageUpload={handleImageUpload}
       />
     </div>

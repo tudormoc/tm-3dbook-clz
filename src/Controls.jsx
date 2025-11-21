@@ -9,6 +9,8 @@ export function Controls({
     setShowPages,
     bindingType,
     setBindingType,
+    coverColor,
+    setCoverColor,
     onImageUpload
 }) {
     const handleWheel = (e, key, min, max) => {
@@ -43,6 +45,18 @@ export function Controls({
                         type="file"
                         accept="image/*"
                         onChange={onImageUpload}
+                    />
+                </label>
+            </div>
+
+            <div className="control-group">
+                <label>
+                    Cover Color:
+                    <input
+                        type="color"
+                        value={coverColor}
+                        onChange={(e) => setCoverColor(e.target.value)}
+                        style={{ width: '100%', height: '35px', cursor: 'pointer', marginTop: '5px' }}
                     />
                 </label>
             </div>

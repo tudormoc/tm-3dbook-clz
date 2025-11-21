@@ -4,7 +4,7 @@ import { useTexture, Text } from '@react-three/drei';
 import * as THREE from 'three';
 
 const COVER_THICKNESS = 0.05; // Thickness of the cardboard cover itself
-const PAGE_OFFSET = 0.02; // Indentation of pages from cover edge
+const PAGE_OFFSET = 0.02; // Indentation of pages from cover edge (THE SQUARES - UNGHIE)
 
 export function Book({
     imageUrl,
@@ -16,7 +16,8 @@ export function Book({
     realSpine,
     openRatio = 0, // 0 to 1
     showPages = true,
-    bindingType = 'swiss' // 'swiss' or 'classic'
+    bindingType = 'swiss', // 'swiss' or 'classic'
+    coverColor = '#ffffff'
 }) {
     const group = useRef();
     const frontRef = useRef();
@@ -98,7 +99,7 @@ export function Book({
             {/* Spine (Center Anchor) */}
             <mesh ref={spineRef} position={[0, 0, 0]} castShadow receiveShadow>
                 <boxGeometry args={[spineWidth, height, COVER_THICKNESS]} />
-                <meshStandardMaterial map={spineTex} color="white" roughness={0.4} />
+                <meshStandardMaterial map={imageUrl ? spineTex : null} color={coverColor} roughness={0.4} />
             </mesh>
 
             {/* Front Cover (Hinged Right of Spine) */}
@@ -106,7 +107,7 @@ export function Book({
                 <group ref={frontRef} rotation={[0, -Math.PI / 2, 0]}>
                     <mesh position={[width / 2, 0, 0]} castShadow receiveShadow>
                         <boxGeometry args={[width, height, COVER_THICKNESS]} />
-                        <meshStandardMaterial attach="material-5" map={frontTex} color="white" roughness={0.4} /> {/* Outside cover */}
+                        <meshStandardMaterial attach="material-5" map={imageUrl ? frontTex : null} color={coverColor} roughness={0.4} /> {/* Outside cover */}
                         <meshStandardMaterial attach="material-4" color="#eee" /> {/* Inside cover */}
                         <meshStandardMaterial attach="material-0" color="#eee" />
                         <meshStandardMaterial attach="material-1" color="#eee" />
@@ -118,10 +119,12 @@ export function Book({
                     {/* Pages Block (Front Side) */}
                     {showPages && (
                         bindingType === 'swiss' ? (
-                            // Swiss Mode: Full block attached to FRONT cover (Right side)
-                            // Positioned on the INSIDE face (Positive Z relative to cover mesh center)
                             <mesh
-                                position={[width / 2 - PAGE_OFFSET, 0, COVER_THICKNESS / 2 + (Math.max(0.01, spineWidth - COVER_THICKNESS * 2) / 2)]}
+                                position={[
+                                    width / 2 - PAGE_OFFSET,
+                                    0,
+                                    COVER_THICKNESS + (Math.max(0.01, spineWidth - COVER_THICKNESS * 2) / 2)
+                                ]}
                                 castShadow
                                 material={pageBlockMaterial}
                             >
@@ -132,16 +135,19 @@ export function Book({
                                 ]} />
                             </mesh>
                         ) : (
-                            // Classic Mode: Right half attached to front cover
                             <mesh
-                                position={[(width - PAGE_OFFSET) / 2, 0, COVER_THICKNESS / 2 + (Math.max(0.01, spineWidth - COVER_THICKNESS * 2) / 4)]}
+                                position={[
+                                    (width - PAGE_OFFSET * 2) / 2,
+                                    0,
+                                    COVER_THICKNESS + (Math.max(0.01, spineWidth - COVER_THICKNESS * 2) / 2)
+                                ]}
                                 castShadow
                                 material={pageBlockMaterial}
                             >
                                 <boxGeometry args={[
-                                    width - PAGE_OFFSET,
+                                    width - PAGE_OFFSET * 2,
                                     height - PAGE_OFFSET * 2,
-                                    Math.max(0.01, spineWidth - COVER_THICKNESS * 2) / 2
+                                    Math.max(0.01, spineWidth - COVER_THICKNESS * 2)
                                 ]} />
                             </mesh>
                         )
@@ -154,7 +160,7 @@ export function Book({
                 <group ref={backRef} rotation={[0, -Math.PI / 2, 0]}>
                     <mesh position={[-width / 2, 0, 0]} castShadow receiveShadow>
                         <boxGeometry args={[width, height, COVER_THICKNESS]} />
-                        <meshStandardMaterial attach="material-5" map={backTex} color="white" roughness={0.4} /> {/* Back face is outside */}
+                        <meshStandardMaterial attach="material-5" map={imageUrl ? backTex : null} color={coverColor} roughness={0.4} /> {/* Back face is outside */}
                         <meshStandardMaterial attach="material-4" color="#eee" /> {/* Inside cover */}
                         <meshStandardMaterial attach="material-0" color="#eee" />
                         <meshStandardMaterial attach="material-1" color="#eee" />
@@ -165,16 +171,19 @@ export function Book({
 
                     {/* Pages Block (Back Side) */}
                     {showPages && bindingType === 'classic' && (
-                        // Left Page Block
                         <mesh
-                            position={[(-width + PAGE_OFFSET) / 2, 0, COVER_THICKNESS / 2 + (Math.max(0.01, spineWidth - COVER_THICKNESS * 2) / 4)]}
+                            position={[
+                                -(width - PAGE_OFFSET * 2) / 2,
+                                0,
+                                COVER_THICKNESS + (Math.max(0.01, spineWidth - COVER_THICKNESS * 2) / 2)
+                            ]}
                             castShadow
                             material={pageBlockMaterial}
                         >
                             <boxGeometry args={[
-                                width - PAGE_OFFSET,
+                                width - PAGE_OFFSET * 2,
                                 height - PAGE_OFFSET * 2,
-                                Math.max(0.01, spineWidth - COVER_THICKNESS * 2) / 2
+                                Math.max(0.01, spineWidth - COVER_THICKNESS * 2)
                             ]} />
                         </mesh>
                     )}
