@@ -1,4 +1,8 @@
-# React + Vite
+# 3D Book - React + Vite
+
+A 3D interactive book built with React and Vite.
+
+🌐 **Live Demo:** https://tudormoc.github.io/tm-3dbook-clz/
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
