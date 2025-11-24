@@ -14,7 +14,7 @@ function App() {
   });
   const [openRatio, setOpenRatio] = useState(0); // 0 (closed) to 1 (fully open)
   const [showPages, setShowPages] = useState(true);
-  const [bindingType, setBindingType] = useState('classic');
+  const [bindingType, setBindingType] = useState('swiss');
   const [coverColor, setCoverColor] = useState('#ffffff');
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -50,7 +50,7 @@ function App() {
                 coverColor={coverColor}
               />
             </Stage>
-            <OrbitControls makeDefault autoRotate={false} enableDamping={false} />
+            <OrbitControls makeDefault autoRotate={false} enableDamping dampingFactor={0.05} />
           </Suspense>
         </Canvas>
       </div>
